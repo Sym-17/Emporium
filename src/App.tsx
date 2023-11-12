@@ -1,10 +1,14 @@
 import AddProducts from "./pages/AddProducts";
+import { Navigate, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
 
 function App() {
   return (
-    <main>
-      <AddProducts />
-    </main>
+    <Routes>
+      <Route path="/" element={<Navigate to="/home" />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/add-products" element={<AddProducts />} />
+    </Routes>
   );
 }
 

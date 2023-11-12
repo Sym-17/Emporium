@@ -4,6 +4,7 @@ import {
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Product = {
   images: File[];
@@ -29,6 +30,8 @@ function AddProducts() {
   const [description, setDescription] = useState<string>("");
   const [descriptionError, setDescriptionError] = useState<string>("");
   const [productList, setProductList] = useState<Product[]>([]);
+
+  const navigate = useNavigate();
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -96,6 +99,7 @@ function AddProducts() {
       setPrice("");
       setDescription("");
       setProductImages([]);
+      navigate("/");
     }
   };
 
