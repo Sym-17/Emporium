@@ -10,3 +10,10 @@
     margin: 0;
   }
 }
+
+/* add custom font; before writing here, add <link> in index.html */
+@layer base {
+  html {
+    font-family: "Red Hat Display", system-ui, sans-serif;
+  }
+}
