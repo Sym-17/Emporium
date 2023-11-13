@@ -2,7 +2,7 @@ import AddProducts from "./pages/AddProducts";
 import { Navigate, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
-import Layout from "./layouts/layout";
+import Layout from "./layouts/Layout";
 
 function App() {
   return (
