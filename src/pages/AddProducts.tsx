@@ -103,18 +103,11 @@ function AddProducts() {
     }
   };
 
-  const inputImageHandle = () => {
-    imageInputRef.current?.click();
-  };
-
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
+  const addImage = (image: File) => {
     setProductImagesError("");
     let duplicate: boolean = false;
     let fileTypeMatched: boolean = true;
     let fileSizeMatched: boolean = true;
-
-    const image = event.dataTransfer.files[0];
 
     //duplicate check
     productImages.filter((productImg) => {
@@ -142,6 +135,23 @@ function AddProducts() {
     if (!duplicate && fileTypeMatched && fileSizeMatched) {
       setProductImages([...productImages, image]);
     } else setProductImages([...productImages]);
+  };
+
+  const inputImageHandle = () => {
+    imageInputRef.current?.click();
+  };
+
+  const inputImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files != null) {
+      const image = event.target.files[0];
+      addImage(image);
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const image = event.dataTransfer.files[0];
+    addImage(image);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -188,8 +198,8 @@ function AddProducts() {
       onSubmit={handleFormSubmit}
     >
       <header className="text-xl font-semibold">Add Product</header>
-      <div className="flex flex-row justify-between gap-6">
-        <div className="flex flex-col w-1/2 p-4 border-2 rounded-lg gap-4">
+      <div className="flex flex-col md:flex-row  justify-between gap-6">
+        <div className="flex flex-col w-full md:w-1/2 p-4 border-2 rounded-lg gap-4">
           <div className="flex justify-between">
             <header>Add Images</header>
             <p className="p-1 text-xs text-red-600">
@@ -222,6 +232,7 @@ function AddProducts() {
               type="file"
               accept="image/*"
               ref={imageInputRef}
+              onChange={inputImage}
               className="hidden"
             />
           </div>
@@ -230,11 +241,17 @@ function AddProducts() {
             {productImages.map((image) => {
               return (
                 <div
-                  className="flex justify-between w-full p-3 border-2 rounded-md"
+                  className="flex justify-between w-full p-3 border-2 rounded-md gap-1 md:gap-5"
                   key={image.name}
                 >
                   <img src={URL.createObjectURL(image)} className="w-10" />
-                  <p>{image.name}</p>
+                  <div className="flex flex-col justify-start w-full overflow-hidden">
+                    <p>{image.name}</p>
+                    <p className="text-blue-500">
+                      {Math.round(image.size / 1024)} KB
+                    </p>
+                  </div>
+
                   <TrashIcon
                     className="w-6 cursor-pointer hover:text-red-600"
                     onClick={() => deleteProductImage(image.name)}
@@ -244,7 +261,7 @@ function AddProducts() {
             })}
           </div>
         </div>
-        <div className="w-1/2 p-4 border-2 rounded-lg flex flex-col gap-4">
+        <div className="w-full md:w-1/2 p-4 border-2 rounded-lg flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <header>Product Name</header>
