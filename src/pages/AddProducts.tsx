@@ -5,10 +5,16 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
+
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Product = {
-  images: File[];
-  name: string;
+  id: string;
+  // images: File[];
+  productName: string;
   category: string;
   subCategory: string;
   price: string;
@@ -19,88 +25,67 @@ function AddProducts() {
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const [productImages, setProductImages] = useState<File[]>([]);
   const [productImagesError, setProductImagesError] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
-  const [nameError, setNameError] = useState<string>("");
-  const [category, setCategory] = useState<string>("");
-  const [categoryError, setCategoryError] = useState<string>("");
-  const [subCategory, setSubCategory] = useState<string>("");
-  const [subCategoryError, setSubCategoryError] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
-  const [priceError, setPriceError] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [descriptionError, setDescriptionError] = useState<string>("");
-  const [productList, setProductList] = useState<Product[]>([]);
 
   const navigate = useNavigate();
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const schema = z.object({
+    productName: z
+      .string()
+      .min(3, { message: "Name cannot less than 3 charecters!" })
+      .max(15, { message: "Name cannot be more than 15 charecters!" }),
+    category: z.enum(["men", "women"], {
+      errorMap: () => ({ message: "Please select a sub category!" }),
+    }),
+    // category: z.enum(["men", "women"]).refine(
+    //   (value) => {
+    //     if (value != "men" && value != "women") return false;
+    //     else return true
+    //   },
+    //   { message: "hi" }
+    // ),
+    subCategory: z.enum(["shoes", "jeans", "shirts", "tshirts"], {
+      errorMap: () => ({ message: "Please select a sub category!" }),
+    }),
+    price: z
+      .number()
+      .min(100, { message: "Minimum price is 100$" })
+      .max(10000, { message: "Maximum price is 10000$" }),
+    description: z
+      .string()
+      .min(1, { message: "You have to give a description!" })
+      .refine(
+        (value) => {
+          const wordCount = value.split(" ").length;
+          if (wordCount < 6) return true;
+          else return false;
+        },
+        { message: "Description must be within 5 words!" }
+      ),
+  });
 
-    let loading: boolean = true;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Product>({
+    resolver: zodResolver(schema),
+  });
 
-    //Error checking
-    if (productName.length > 20) {
-      setNameError("Product name cannot more than 20 Charecters!");
-      loading = false;
-    } else if (productName.length === 0) {
-      loading = false;
-      setNameError("Product name cannot be empty!");
-    }
+  const submitForm = (data: Product) => {
+    // data.images = [...productImages];
+    const id = nanoid(4);
+    data.id = id;
 
-    if (category.length === 0) {
-      loading = false;
-      setCategoryError("You have to select one!");
-    }
+    const oldProductJSON = localStorage.getItem("product");
 
-    if (subCategory.length === 0) {
-      loading = false;
-      setSubCategoryError("You have to select one!");
-    }
+    const oldProductString = oldProductJSON ? JSON.parse(oldProductJSON) : [];
 
-    if (price.length === 0) {
-      loading = false;
-      setPriceError("Price cannot be empty!");
-    }
+    const newData = [...oldProductString, data];
 
-    if (description.length === 0) {
-      loading = false;
-      setDescriptionError("Description cannot be empty!");
-    }
+    const jsonString = JSON.stringify(newData);
 
-    if (description.length != 0) {
-      const descriptionWords = description.split(" ");
-      if (descriptionWords.length > 10) {
-        loading = false;
-        setDescriptionError("Description cannot be more than 10 words!");
-      }
-    }
-
-    if (productImages.length > 4) {
-      loading = false;
-      setProductImagesError("You cannot upload more than 4 images!");
-    } else if (productImages.length === 0) {
-      loading = false;
-      setProductImagesError("Upload atleast one image of product!");
-    }
-
-    if (loading) {
-      const product = {
-        images: [...productImages],
-        name: productName,
-        category,
-        subCategory,
-        price,
-        description,
-      };
-      setProductList([...productList, product]);
-      setProductName("");
-      setCategory("");
-      setSubCategory("");
-      setPrice("");
-      setDescription("");
-      setProductImages([]);
-      navigate("/");
-    }
+    localStorage.setItem("product", jsonString);
+    navigate("/");
   };
 
   const addImage = (image: File) => {
@@ -167,35 +152,10 @@ function AddProducts() {
     setProductImagesError(" ");
   };
 
-  const addProductName = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setNameError("");
-    setProductName(e.target.value);
-  };
-
-  const addCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategoryError("");
-    setCategory(e.target.value);
-  };
-
-  const addSubCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSubCategoryError("");
-    setSubCategory(e.target.value);
-  };
-
-  const addPrice = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setPriceError("");
-    setPrice(e.target.value);
-  };
-
-  const addDescription = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setDescriptionError("");
-    setDescription(e.target.value);
-  };
-
   return (
     <form
       className="flex flex-col w-full p-6 gap-6"
-      onSubmit={handleFormSubmit}
+      onSubmit={handleSubmit(submitForm)}
     >
       <header className="text-xl font-semibold">Add Product</header>
       <div className="flex flex-col md:flex-row  justify-between gap-6">
@@ -264,38 +224,36 @@ function AddProducts() {
         <div className="w-full md:w-1/2 p-4 border-2 rounded-lg flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <header>Product Name</header>
+              <label>Product Name</label>
               <p className="p-1 text-xs text-red-600">
-                {nameError ? nameError : ""}
+                {errors.productName ? errors.productName.message : ""}
               </p>
             </div>
             <input
               type="text"
-              className={`w-full p-2 border-2 rounded-md ${
-                nameError ? "border-red-400" : ""
+              className={`w-full p-2 border-2 outline-none rounded-md  ${
+                errors.productName ? "border-red-400" : ""
               }`}
-              value={productName}
               placeholder="Enter your product name"
-              onChange={addProductName}
+              {...register("productName")}
             />
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <header>Category</header>
+              <label>Category</label>
               <p className="p-1 text-xs text-red-600">
-                {categoryError ? categoryError : ""}
+                {errors.category ? errors.category.message : ""}
               </p>
             </div>
 
             <div>
               <select
-                className={`w-full p-2 border-2 rounded-md ${
-                  categoryError ? "border-red-400" : ""
+                className={`w-full p-2 border-2 outline-none rounded-md  ${
+                  errors.category ? "border-red-400" : ""
                 }`}
-                value={category}
-                onChange={addCategory}
+                {...register("category")}
               >
-                <option value="" disabled hidden aria-hidden>
+                <option value="" disabled selected hidden>
                   Select a category
                 </option>
                 <option value="men">Men</option>
@@ -305,20 +263,19 @@ function AddProducts() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <header>Sub Category</header>
+              <label>Sub Category</label>
               <p className="p-1 text-xs text-red-600">
-                {subCategoryError ? subCategoryError : ""}
+                {errors.subCategory ? errors.subCategory.message : ""}
               </p>
             </div>
 
             <select
-              className={`w-full p-2 border-2 rounded-md ${
-                subCategoryError ? "border-red-400" : ""
+              className={`w-full p-2 border-2 outline-none rounded-md  ${
+                errors.subCategory ? "border-red-400" : ""
               }`}
-              value={subCategory}
-              onChange={addSubCategory}
+              {...register("subCategory")}
             >
-              <option value="" hidden disabled>
+              <option value="f" disabled hidden selected>
                 Select a sub category
               </option>
               <option value="shoes">Shoes</option>
@@ -329,40 +286,37 @@ function AddProducts() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <header>Price</header>
+              <label>Price</label>
               <p className="p-1 text-xs text-red-600">
-                {priceError ? priceError : ""}
+                {errors.price ? errors.price.message : ""}
               </p>
             </div>
             <input
               type="number"
-              min={1}
-              value={price}
-              className={`w-full p-2 border-2 rounded-md ${
-                priceError ? "border-red-400" : ""
+              className={`w-full p-2 border-2 outline-none rounded-md  ${
+                errors.price ? "border-red-400" : ""
               }`}
               placeholder="Enter your product price"
-              onChange={addPrice}
+              {...register("price", { valueAsNumber: true })}
             />
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <header>Description</header>
+              <label>Description</label>
               <p className="p-1 text-xs text-red-600">
-                {descriptionError ? descriptionError : ""}
+                {errors.description ? errors.description.message : ""}
               </p>
             </div>
 
             <textarea
-              className={`w-full p-2 border-2 rounded-md resize-none ${
-                descriptionError ? "border-red-400" : ""
+              className={`w-full p-2 border-2 outline-none resize-none rounded-md  ${
+                errors.description ? "border-red-400" : ""
               }`}
-              value={description}
-              onChange={addDescription}
+              {...register("description")}
             />
           </div>
           <div className="flex flex-col gap-2">
-            <div className="">Tags</div>
+            <label>Tags</label>
             <input type="text" className="w-full p-2 border-2 rounded-md" />
           </div>
         </div>
