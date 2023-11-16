@@ -1,5 +1,5 @@
 import panjabiImage from "../assets/panjabi_sailor.jpg";
-import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { HeartIcon, ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../components/useCart";
 
 type Product = {
@@ -11,32 +11,13 @@ type Product = {
   description: string;
 };
 
-export default function Home() {
-  const allProductsString = localStorage.getItem("product");
-  const allProducts = allProductsString ? JSON.parse(allProductsString) : [];
-
+export default function UserCart() {
   const {
-    incCartProductNumber,
     decCartProductNumber,
-    cartedProductsIDs,
-    addCartProduct,
     removeCartProduct,
+    cartedProductsIDs,
     allCartedProducts,
   } = useCart();
-
-  const addToCart = (productToAdd: Product) => {
-    let duplicate = false;
-    allCartedProducts.forEach((product) => {
-      if (product.id === productToAdd.id) {
-        duplicate = true;
-      }
-    });
-    if (!duplicate) {
-      addCartProduct(productToAdd);
-      incCartProductNumber();
-      cartedProductsIDs.set(productToAdd.id, true);
-    }
-  };
 
   const deleteFromCart = (productToRemove: Product) => {
     allCartedProducts.forEach((product) => {
@@ -50,8 +31,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-4 items-center pt-10 pb-10 pl-5 pr-5 lg:pl-20 lg:pr-20">
+      {allCartedProducts.length === 0 ? (
+        <p className="text-2xl lg:text-4xl text-[#536DFE]">
+          You don't have any product at cart!
+        </p>
+      ) : (
+        <></>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-        {allProducts.map((product: Product) => {
+        {allCartedProducts.map((product: Product) => {
           return (
             <div className="flex flex-col gap-2" key={product.id}>
               <img src={panjabiImage} alt="" />
@@ -64,17 +52,9 @@ export default function Home() {
                 </div>
                 <div className="flex gap-4">
                   <HeartIcon className="w-6 text-[#3f3d56] cursor-pointer hover:text-[#536DFE]" />
-                  <ShoppingBagIcon
-                    className={`w-6 cursor-pointer hover:text-[#536DFE] ${
-                      cartedProductsIDs.get(product.id)
-                        ? "fill-[#536DFE] text-[#536DFE] hover:fill-white"
-                        : "text-[#3f3d56]"
-                    }`}
-                    onClick={
-                      cartedProductsIDs.get(product.id)
-                        ? () => deleteFromCart(product)
-                        : () => addToCart(product)
-                    }
+                  <ArchiveBoxXMarkIcon
+                    className="w-6 cursor-pointer text-[#3f3d56] hover:text-[#536DFE]"
+                    onClick={() => deleteFromCart(product)}
                   />
                 </div>
               </div>

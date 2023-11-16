@@ -4,8 +4,10 @@ import {
   ShoppingCartIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { useCart } from "./useCart";
 
 export default function Nav() {
+  const { totalCartProduct } = useCart();
   return (
     <div>
       <nav className="flex justify-between items-center pl-5 pr-5 lg:pl-20 lg:pr-20 pt-5 pb-5 border-b-2 border-gray-100">
@@ -43,7 +45,7 @@ export default function Nav() {
 
         <div className="flex gap-1 lg:gap-3">
           <div className="flex justify-between bg-slate-50 rounded-3xl">
-            <MagnifyingGlassIcon className="w-10 p-2 lg:w-14 lg:p-4 text-[#536DFE] cursor-pointer" />
+            <MagnifyingGlassIcon className="w-10 p-2 lg:w-16 lg:p-5 text-[#536DFE] cursor-pointer" />
             {window.innerWidth >= 1024 ? (
               <input
                 type="text"
@@ -55,11 +57,17 @@ export default function Nav() {
             )}
           </div>
           <Link to="/login">
-            <UserIcon className="w-10 p-2 lg:w-14 lg:p-4 text-[#3f3d56] bg-slate-50 rounded-3xl" />
+            <UserIcon className="w-10 p-2 lg:w-16 lg:p-5 text-[#3f3d56] bg-slate-50 rounded-3xl hover:text-[#536DFE]" />
           </Link>
-          <Link to="/">
-            <ShoppingCartIcon className="w-10 p-2 lg:w-14 lg:p-4 text-[#3f3d56] bg-slate-50 rounded-3xl" />
-          </Link>
+          <div className="flex justify-between w-10 p-2 lg:w-16 lg:p-4 bg-slate-50 rounded-3xl">
+            <Link to="/user-cart">
+              <ShoppingCartIcon className="w-5 lg:w-7 text-[#3f3d56] hover:text-[#536DFE]" />
+            </Link>
+            <p className="text-[10px] lg:text-xs text-[#536DFE] font-extrabold mt-auto">
+              {" "}
+              {totalCartProduct}
+            </p>
+          </div>
         </div>
       </nav>
     </div>
