@@ -2,6 +2,8 @@ import panjabiImage from "../assets/panjabi_sailor.jpg";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../components/useCart";
 
+//comment
+
 type Product = {
   id: string;
   productName: string;
