@@ -1,6 +1,7 @@
 import panjabiImage from "../assets/panjabi_sailor.jpg";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../components/useCart";
+import { useEffect, useState } from "react";
 
 //comment
 
@@ -14,8 +15,22 @@ type Product = {
 };
 
 export default function Home() {
-  const allProductsString = localStorage.getItem("product");
-  const allProducts = allProductsString ? JSON.parse(allProductsString) : [];
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const snapshot = await fetch("http://localhost:3000/");
+        const response: Record<string, Product> = await snapshot.json();
+        const responseValues: Product[] = Object.values(response);
+        setAllProducts([...responseValues]);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const {
     incCartProductNumber,
