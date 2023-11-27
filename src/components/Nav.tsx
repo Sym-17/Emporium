@@ -17,45 +17,40 @@ export default function Nav() {
             eMporiuM
           </header>
         </Link>
-        {window.innerWidth >= 1024 ? (
-          <div className="flex justify-between gap-10">
-            <Link href="/">
-              <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
-                Mens
-              </p>
-            </Link>
-            <Link href="/">
-              <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
-                Ladies
-              </p>
-            </Link>
-            <Link href="/">
-              <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
-                Childrens
-              </p>
-            </Link>
-            <Link href="/">
-              <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
-                Accessories
-              </p>
-            </Link>
-          </div>
-        ) : (
-          <div></div>
-        )}
+
+        <div className="hidden lg:flex justify-between gap-10">
+          <Link href="/">
+            <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
+              Mens
+            </p>
+          </Link>
+          <Link href="/">
+            <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
+              Ladies
+            </p>
+          </Link>
+          <Link href="/">
+            <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
+              Childrens
+            </p>
+          </Link>
+          <Link href="/">
+            <p className="text-xl text-[#3f3d56] cursor-pointer border-b-2 border-b-transparent hover:border-b-[#536DFE]">
+              Accessories
+            </p>
+          </Link>
+        </div>
 
         <div className="flex gap-1 lg:gap-3">
           <div className="flex justify-between bg-slate-50 rounded-3xl">
             <MagnifyingGlassIcon className="w-10 p-2 lg:w-16 lg:p-5 text-[#536DFE] cursor-pointer" />
-            {/* {window.innerWidth >= 1024 ? (
+            <div className="hidden lg:flex justify-center">
               <input
                 type="text"
                 className="pr-2 pt-2 pb-2 bg-transparent outline-none text-[#3f3d56]"
                 placeholder="Search"
               />
-            ) : (
-              <></>
-            )} */}
+            </div>
           </div>
           <Link href="/login">
             <UserIcon className="w-10 p-2 lg:w-16 lg:p-5 text-[#3f3d56] bg-slate-50 rounded-3xl hover:text-[#536DFE]" />

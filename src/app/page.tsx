@@ -5,8 +5,6 @@ import { useCart } from "../store/useCart";
 // import { useEffect, useState } from "react";
 import Image from "next/image";
 
-//comment
-
 type Product = {
   id: string;
   productName: string;
@@ -25,7 +23,7 @@ async function fetchData() {
     const responseValues: Product[] = Object.values(response);
     allProducts = [...responseValues];
   } catch (err) {
-    // console.log(err);
+    console.log(err);
   }
 }
 

@@ -5,18 +5,14 @@ import Link from "next/link";
 
 export default function Login() {
   return (
-    <div className="flex flex-col lg:flex-row justify-center items-center gap-10">
-      {window.innerWidth >= 1024 ? (
-        <Image
-          src={LoginSVG}
-          alt=""
-          className="w-1/2 p-40"
-          width={1}
-          height={1}
-        />
-      ) : (
-        <></>
-      )}
+    <div className="flex flex-col-reverse lg:flex-row justify-center items-center gap-10">
+      <Image
+        src={LoginSVG}
+        alt=""
+        className="w-full lg:w-1/2 p-10 lg:p-40"
+        width={1}
+        height={1}
+      />
 
       <div className="flex flex-col w-full lg:w-1/2 p-10 lg:p-28 gap-5 lg:border-l-2 lg:border-l-gray-200">
         <div className="flex flex-col gap-2">
