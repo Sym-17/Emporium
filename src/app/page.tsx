@@ -1,7 +1,9 @@
+"use client";
 import panjabiImage from "../assets/panjabi_sailor.jpg";
 import { HeartIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
-import { useCart } from "../components/useCart";
-import { useEffect, useState } from "react";
+import { useCart } from "../store/useCart";
+// import { useEffect, useState } from "react";
+import Image from "next/image";
 
 //comment
 
@@ -14,23 +16,21 @@ type Product = {
   description: string;
 };
 
+let allProducts: Product[] = [];
+
+async function fetchData() {
+  try {
+    const snapshot = await fetch("http://localhost:3000/");
+    const response: Record<string, Product> = await snapshot.json();
+    const responseValues: Product[] = Object.values(response);
+    allProducts = [...responseValues];
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
 export default function Home() {
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const snapshot = await fetch("http://localhost:3000/");
-        const response: Record<string, Product> = await snapshot.json();
-        const responseValues: Product[] = Object.values(response);
-        setAllProducts([...responseValues]);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    fetchData();
-  }, []);
+  fetchData();
 
   const {
     incCartProductNumber,
@@ -71,7 +71,7 @@ export default function Home() {
         {allProducts.map((product: Product) => {
           return (
             <div className="flex flex-col gap-2" key={product.id}>
-              <img src={panjabiImage} alt="" />
+              <Image src={panjabiImage} alt="" height={100} width={100} />
               <div className="flex justify-between">
                 <div>
                   <p className="text-xl text-[#3f3d56]">

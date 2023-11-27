@@ -1,15 +1,17 @@
+"use client";
 import {
   TrashIcon,
   ArrowUpTrayIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 
 type Product = {
   id: string;
@@ -26,7 +28,7 @@ function AddProducts() {
   const [productImages, setProductImages] = useState<File[]>([]);
   const [productImagesError, setProductImagesError] = useState<string>("");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const schema = z.object({
     productName: z
@@ -85,7 +87,7 @@ function AddProducts() {
     const jsonString = JSON.stringify(newData);
 
     localStorage.setItem("product", jsonString);
-    navigate("/");
+    // navigate("/");
   };
 
   const addImage = (image: File) => {
@@ -204,7 +206,13 @@ function AddProducts() {
                   className="flex justify-between w-full p-3 border-2 rounded-md gap-1 md:gap-5"
                   key={image.name}
                 >
-                  <img src={URL.createObjectURL(image)} className="w-10" />
+                  <Image
+                    src={URL.createObjectURL(image)}
+                    alt=""
+                    width={9}
+                    height={16}
+                    className="w-10"
+                  />
                   <div className="flex flex-col justify-start w-full overflow-hidden">
                     <p>{image.name}</p>
                     <p className="text-blue-500">

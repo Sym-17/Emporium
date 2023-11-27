@@ -1,6 +1,8 @@
-import panjabiImage from "../assets/panjabi_sailor.jpg";
+"use client";
+import panjabiImage from "../../assets/panjabi_sailor.jpg";
 import { HeartIcon, ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
-import { useCart } from "../components/useCart";
+import { useCart } from "../../store/useCart";
+import Image from "next/image";
 
 type Product = {
   id: string;
@@ -33,7 +35,7 @@ export default function UserCart() {
     <div className="flex flex-col gap-4 items-center pt-10 pb-10 pl-5 pr-5 lg:pl-20 lg:pr-20">
       {allCartedProducts.length === 0 ? (
         <p className="text-2xl lg:text-4xl text-[#536DFE]">
-          You don't have any product at cart!
+          You do not have any product at cart!
         </p>
       ) : (
         <></>
@@ -42,7 +44,7 @@ export default function UserCart() {
         {allCartedProducts.map((product: Product) => {
           return (
             <div className="flex flex-col gap-2" key={product.id}>
-              <img src={panjabiImage} alt="" />
+              <Image src={panjabiImage} alt="" />
               <div className="flex justify-between">
                 <div>
                   <p className="text-xl text-[#3f3d56]">
