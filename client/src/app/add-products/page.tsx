@@ -5,8 +5,8 @@ import {
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -28,7 +28,7 @@ function AddProducts() {
   const [productImages, setProductImages] = useState<File[]>([]);
   const [productImagesError, setProductImagesError] = useState<string>("");
 
-  // const navigate = useNavigate();
+  const router = useRouter();
 
   const schema = z.object({
     productName: z
@@ -74,20 +74,37 @@ function AddProducts() {
   });
 
   const submitForm = (data: Product) => {
+    // // data.images = [...productImages];
+    // const id = nanoid(4);
+    // data.id = id;
+
+    // const oldProductJSON = localStorage.getItem("product");
+
+    // const oldProductString = oldProductJSON ? JSON.parse(oldProductJSON) : [];
+
+    // const newData = [...oldProductString, data];
+
+    // const jsonString = JSON.stringify(newData);
+
+    // localStorage.setItem("product", jsonString);
+    // navigate("/");
+
     // data.images = [...productImages];
+
     const id = nanoid(4);
     data.id = id;
 
-    const oldProductJSON = localStorage.getItem("product");
-
-    const oldProductString = oldProductJSON ? JSON.parse(oldProductJSON) : [];
-
-    const newData = [...oldProductString, data];
-
-    const jsonString = JSON.stringify(newData);
-
-    localStorage.setItem("product", jsonString);
-    // navigate("/");
+    async function postData() {
+      const res = await fetch("http://localhost:5000/add-product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      router.push("/");
+    }
+    postData();
   };
 
   const addImage = (image: File) => {
