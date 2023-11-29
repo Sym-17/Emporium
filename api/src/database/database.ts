@@ -1,7 +1,10 @@
 import { Sequelize } from "sequelize";
+import { configDotenv } from "dotenv";
 
-const database = new Sequelize(
-  "postgres://dydltbiy:6F4fQ62w27XbdEuM4Nb76bTVTRFqiwco@pom.db.elephantsql.com/dydltbiy"
-);
+configDotenv({ path: "./.env.local" });
+
+const url = process.env.ELEPHANT_SQL_URL ?? "";
+
+const database = new Sequelize(url);
 
 export default database;
