@@ -43,7 +43,7 @@ export default function Home() {
         const response: Record<string, Product> = await snapshot.json();
         const responseValues: Product[] = Object.values(response);
         setAllProducts([...responseValues]);
-        console.log(allProducts);
+        // console.log(allProducts);
       } catch (err) {
         // console.log(err);
       }
@@ -101,15 +101,19 @@ export default function Home() {
 
             <div className="flex justify-between">
               <div>
-                <p className="text-xl text-[#3f3d56]">{product.productName}</p>
-                <p>{product.price}</p>
+                <p className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl text-[#3f3d56]">
+                  {product.productName}
+                </p>
+                <p className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl text-[#3f3d56]">
+                  {product.price}
+                </p>
               </div>
-              <div className="flex gap-4">
-                <HeartIcon className="w-6 text-[#3f3d56] cursor-pointer hover:text-[#536DFE]" />
+              <div className="flex gap-4 items-center pl-2">
+                <HeartIcon className="w-4 md:w-5 xl:w-6 text-[#3f3d56] cursor-pointer hover:text-[#536DFE]" />
                 <ShoppingBagIcon
-                  className={`w-6 cursor-pointer hover:text-[#536DFE] ${
+                  className={`w-4 md:w-5 xl:w-6 cursor-pointer hover:text-[#536DFE] ${
                     cartedProductsIDs.get(product.id)
-                      ? "fill-[#536DFE] text-[#536DFE] hover:fill-white"
+                      ? "fill-[#536DFE] text-[#536DFE]"
                       : "text-[#3f3d56]"
                   }`}
                   onClick={
