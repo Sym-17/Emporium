@@ -1,5 +1,5 @@
 "use client";
-import panjabiImage from "../../assets/panjabi_sailor.jpg";
+import panjabiImage from "../../../public/panjabi_sailor.jpg";
 import { HeartIcon, ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../../store/useCart";
 import Image from "next/image";

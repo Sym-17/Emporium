@@ -1,9 +1,13 @@
-import Login from "../../components/Login";
+import LoginSignup from "../../components/LoginSignup";
 
 export default function LoginPage() {
   return (
     <div>
-      <Login />
+      <LoginSignup
+        pageTitle="login"
+        buttonTitle="Log In"
+        buttonBottonText="Forget Your Password? "
+      />
     </div>
   );
 }
