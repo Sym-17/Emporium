@@ -5,7 +5,7 @@ import {
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
-import { nanoid } from "nanoid";
+// import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 
 import { z } from "zod";
@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 
 type Product = {
-  id: string;
+  // id: string;
   // images: File[];
   productName: string;
   category: string;
@@ -91,8 +91,8 @@ function AddProducts() {
 
     // data.images = [...productImages];
 
-    const id = nanoid(4);
-    data.id = id;
+    // const id = nanoid(4);
+    // data.id = id;
 
     async function postData() {
       const res = await fetch("http://localhost:5000/add-product", {
