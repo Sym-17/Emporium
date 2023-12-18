@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import database from "./database/database.js";
-import Model from "./model/Model.js";
+import ProductModel from "./model/ProductModel.js";
+import UserModel from "./model/UserModel.js";
 import bodyParser from "body-parser";
 import { nanoid } from "nanoid";
 
@@ -23,7 +24,7 @@ app.get("/", (_req, _res) => {
     .then(async () => {
       // console.log("Database synced");
 
-      const allProducts = await Model.findAll({
+      const allProducts = await ProductModel.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
@@ -36,13 +37,21 @@ app.get("/", (_req, _res) => {
 });
 
 app.post("/add-product", (req, res) => {
-  Model.create({
-    id: req.body.id,
+  ProductModel.create({
     productName: req.body.productName,
     category: req.body.category,
     subCategory: req.body.subCategory,
     price: req.body.price,
     description: req.body.description,
+  });
+  res.send("Received!");
+});
+
+app.post("/signup", (req, res) => {
+  UserModel.create({
+    userName: req.body.userName,
+    email: req.body.email,
+    password: req.body.password,
   });
   res.send("Received!");
 });

@@ -1,13 +1,13 @@
 import { DataTypes } from "sequelize";
+import database from "../database/database";
 
-import sequelize from "../database/database";
-import { timeStamp } from "console";
-const Model = sequelize.define(
+const ProductModel = database.define(
   "product",
   {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
+      autoIncrement: true,
     },
     productName: {
       type: DataTypes.STRING,
@@ -38,4 +38,4 @@ const Model = sequelize.define(
   }
 );
 
-export default Model;
+export default ProductModel;
