@@ -17,19 +17,19 @@ type navTitle = {
 const navTitles: navTitle[] = [
   {
     title: "Mens",
-    link: "/add-products",
+    link: "/men",
   },
   {
     title: "Womens",
-    link: "/",
+    link: "/women",
   },
   {
     title: "Childrens",
-    link: "/",
+    link: "/children",
   },
   {
     title: "Accessories",
-    link: "/",
+    link: "/accessories",
   },
 ];
 
@@ -67,7 +67,7 @@ export default function Nav() {
       ) : (
         <></>
       )}
-      <nav className="flex justify-between items-center pl-5 pr-5 lg:pl-20 lg:pr-20 pt-5 pb-5 border-b-2 border-gray-100">
+      <nav className="flex justify-between items-center pl-5 pr-5 md:pl-10 md:pr-10 lg:pl-24 lg:pr-24 pt-5 pb-5 border-b-2 border-gray-100">
         <Bars3CenterLeftIcon
           className="w-5 md:hidden"
           onClick={() => setOpenSideBar(true)}

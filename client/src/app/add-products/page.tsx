@@ -35,8 +35,8 @@ function AddProducts() {
       .string()
       .min(3, { message: "Name cannot less than 3 charecters!" })
       .max(15, { message: "Name cannot be more than 15 charecters!" }),
-    category: z.enum(["men", "women"], {
-      errorMap: () => ({ message: "Please select a sub category!" }),
+    category: z.enum(["men", "women", "child", "other"], {
+      errorMap: () => ({ message: "Please select a category!" }),
     }),
     // category: z.enum(["men", "women"]).refine(
     //   (value) => {
@@ -45,9 +45,23 @@ function AddProducts() {
     //   },
     //   { message: "hi" }
     // ),
-    subCategory: z.enum(["shoes", "jeans", "shirts", "tshirts"], {
-      errorMap: () => ({ message: "Please select a sub category!" }),
-    }),
+    subCategory: z.enum(
+      [
+        "shoes",
+        "pants",
+        "shirts",
+        "tshirts",
+        "trouser",
+        "belt",
+        "tie",
+        "shawl",
+        "shocks",
+        "gloves",
+      ],
+      {
+        errorMap: () => ({ message: "Please select a sub category!" }),
+      }
+    ),
     price: z
       .number()
       .min(100, { message: "Minimum price is 100$" })
@@ -283,6 +297,8 @@ function AddProducts() {
                 </option>
                 <option value="men">Men</option>
                 <option value="women">Women</option>
+                <option value="child">Children</option>
+                <option value="other">Accessories</option>
               </select>
             </div>
           </div>
@@ -304,9 +320,15 @@ function AddProducts() {
                 Select a sub category
               </option>
               <option value="shoes">Shoes</option>
-              <option value="jeans">Jeans</option>
+              <option value="pants">Pants</option>
               <option value="shirts">Shirts</option>
-              <option value="tShirts">T-Shirts</option>
+              <option value="tshirts">T-Shirts</option>
+              <option value="trouser">Trouser</option>
+              <option value="belt">Belt</option>
+              <option value="tie">Tie</option>
+              <option value="shocks">Shocks</option>
+              <option value="shawl">Shawl</option>
+              <option value="gloves">Gloves</option>
             </select>
           </div>
           <div className="flex flex-col gap-2">
