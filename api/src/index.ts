@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
-import database from "./database/database.js";
-import ProductModel from "./model/ProductModel.js";
-import UserModel from "./model/UserModel.js";
 import bodyParser from "body-parser";
 import { nanoid } from "nanoid";
+import addProduct from "./controller/addProduct.js";
+import signup from "./controller/signup.js";
+import showProducts from "./controller/showProducts.js";
 
 // Initialize the express engine
 const app: express.Application = express();
@@ -18,46 +18,29 @@ app.use(express.json());
 app.use(cors());
 
 // Handling '/' Request
-app.get("/", (_req, _res) => {
-  database
-    .sync()
-    .then(async () => {
-      // console.log("Database synced");
-
-      const allProducts = await ProductModel.findAll({
-        attributes: {
-          exclude: ["createdAt", "updatedAt"],
-        },
-      });
-      _res.send(allProducts);
-    })
-    .catch((err) => {
-      console.error("Error syncing database:", err);
-    });
+app.get("/", (req, res) => {
+  showProducts(req, res, "");
 });
 
-app.post("/add-product", (req, res) => {
-  ProductModel.create({
-    productName: req.body.productName,
-    category: req.body.category,
-    subCategory: req.body.subCategory,
-    price: req.body.price,
-    description: req.body.description,
-  });
-  res.send("Received!");
-});
+app.post("/add-product", addProduct);
 
-app.post("/signup", (req, res) => {
-  UserModel.create({
-    userName: req.body.userName,
-    email: req.body.email,
-    password: req.body.password,
-  });
-  res.send("Received!");
+app.post("/signup", signup);
+
+app.get("/men", (req, res) => {
+  showProducts(req, res, "men");
+});
+app.get("/women", (req, res) => {
+  showProducts(req, res, "women");
+});
+app.get("/children", (req, res) => {
+  showProducts(req, res, "child");
+});
+app.get("/accessories", (req, res) => {
+  showProducts(req, res, "other");
 });
 
 // Server setup
 app.listen(port, () => {
-  console.log(`TypeScript with Express 
+  console.log(`TypeScript with Express cd 
 		http://localhost:${port}/`);
 });
