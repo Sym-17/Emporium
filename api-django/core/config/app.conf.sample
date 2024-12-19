@@ -1,0 +1,4 @@
+[server]
+debug = false
+env = "development"
+secret_key = "XXX"
