@@ -46,5 +46,5 @@ class User(models.Model):
 
     class Meta:
         db_table = "emporium_user"  # Avoid potential conflict with auth_user
-        verbose_name = "User"
-        verbose_name_plural = "Users"
+        verbose_name = "Emporium User"
+        verbose_name_plural = "Emporium Users"
