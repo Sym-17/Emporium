@@ -11,6 +11,13 @@ class ConfigLoader:
             return toml.load(file)
 
 
+class DatabaseConfig(BaseModel):
+    host: str
+    user: str
+    password: str
+    port: str
+    db_name: str
+
 class ServerConfig(BaseModel):
     debug: bool
     env: str
@@ -19,3 +26,4 @@ class ServerConfig(BaseModel):
 
 class Config(BaseModel):
     server: ServerConfig
+    database: DatabaseConfig

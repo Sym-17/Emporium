@@ -1,5 +1,10 @@
-# environment variable
+# virtual env
+venv
 env
+.venv
+.env
+
+# config file
 *.conf
 
 # pycache

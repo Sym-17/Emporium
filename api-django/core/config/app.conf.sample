@@ -2,3 +2,10 @@
 debug = false
 env = "development"
 secret_key = "XXX"
+
+[database]
+host = "xxx"
+user = "xxx"
+password = "xxx"
+port = "xxx"
+db_name = "xxx"
