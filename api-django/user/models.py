@@ -1,5 +1,6 @@
-from django.db import models
+from django.contrib.auth.hashers import make_password
 from django.core.validators import RegexValidator
+from django.db import models
 
 
 class User(models.Model):
@@ -43,6 +44,16 @@ class User(models.Model):
 
     def __str__(self):
         return f"{self.username}"
+
+    # For hashing the password
+    def save(self, *args, **kwargs):
+        if self.pk:  # If the user already exists
+            previous_obj = User.objects.get(pk=self.pk)
+            if self.password != previous_obj.password:
+                self.password = make_password(self.password)
+        else:
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
 
     class Meta:
         db_table = "emporium_user"  # Avoid potential conflict with auth_user

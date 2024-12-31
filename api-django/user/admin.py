@@ -13,6 +13,8 @@ class UserAdmin(admin.ModelAdmin):
     ]
     list_filter = ["role"]
 
+    readonly_fields = ["password"]
+
     search_help_text = "Enter username, email or phone to search"
     search_fields = ["username", "email", "phone"]
 
