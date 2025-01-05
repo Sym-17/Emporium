@@ -21,20 +21,18 @@ class UserLogInSerializer(serializers.ModelSerializer):
         password = data.get("password")
 
         if username_or_email and password:
-            user = (
-                User.objects.filter(
-                    Q(email=username_or_email) | Q(username=username_or_email)
-                )
-                .values("id", "username", "password")
-                .first()
-            )
+            user = User.objects.filter(
+                Q(email=username_or_email) | Q(username=username_or_email)
+            ).first()
             if user:
-                if check_password(password, user.get("password")):
+                if check_password(password, user.password):
                     return user
                 else:
                     raise serializers.ValidationError({"message": "Invalid Password!"})
             else:
-                raise serializers.ValidationError({"message": "Invalid Username or Email!"})
+                raise serializers.ValidationError(
+                    {"message": "Invalid Username or Email!"}
+                )
         else:
             raise serializers.ValidationError({"message": "Both fields are required!"})
 

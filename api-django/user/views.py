@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from user.serializers import UserLogInSerializer, UserSignUpSerializer
 
@@ -27,8 +28,25 @@ class UserLogInView(APIView):
         serializer = UserLogInSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validate_user(data=request.data)
-            return Response(
-                {"message": "Log In Successfully"},
+
+            refresh_token = RefreshToken.for_user(user)
+            access_token = str(refresh_token.access_token)
+
+            response = Response(
+                {
+                    "message": "Log In Successfully",
+                },
                 status=status.HTTP_202_ACCEPTED,
             )
+            response.set_cookie(
+                "access_token", access_token, httponly=True, secure=True, samesite="Lax"
+            )
+            response.set_cookie(
+                "refresh_token",
+                str(refresh_token),
+                httponly=True,
+                secure=True,
+                samesite="Lax",
+            )
+            return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
