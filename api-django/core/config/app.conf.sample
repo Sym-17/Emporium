@@ -9,3 +9,8 @@ user = "xxx"
 password = "xxx"
 port = "xxx"
 db_name = "xxx"
+
+[user_authentication]
+access_token_lifetime_in_seconds = 0.0
+refresh_token_lifetime_in_hours = 0.0
+signing_key = "xxx"

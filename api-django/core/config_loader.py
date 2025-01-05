@@ -11,12 +11,19 @@ class ConfigLoader:
             return toml.load(file)
 
 
+class UserAuthentication(BaseModel):
+    signing_key: str
+    access_token_lifetime_in_seconds: float
+    refresh_token_lifetime_in_hours: float
+
+
 class DatabaseConfig(BaseModel):
     host: str
     user: str
     password: str
     port: str
     db_name: str
+
 
 class ServerConfig(BaseModel):
     debug: bool
@@ -27,3 +34,4 @@ class ServerConfig(BaseModel):
 class Config(BaseModel):
     server: ServerConfig
     database: DatabaseConfig
+    user_authentication: UserAuthentication
