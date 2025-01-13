@@ -30,28 +30,35 @@ class UserLogInView(APIView):
     def post(self, request):
         serializer = UserLogInSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.validate_user(data=request.data)
+            try:
+                user = serializer.validate_user(data=request.data)
 
-            refresh_token = RefreshToken.for_user(user)
-            access_token = str(refresh_token.access_token)
+                refresh_token = RefreshToken.for_user(user)
+                access_token = get_new_access_token(refresh_token)
 
-            response = Response(
-                {
-                    "message": "Log In Successfully",
-                },
-                status=status.HTTP_202_ACCEPTED,
-            )
-            response.set_cookie(
-                "access_token", access_token, httponly=True, secure=True, samesite="Lax"
-            )
-            response.set_cookie(
-                "refresh_token",
-                str(refresh_token),
-                httponly=True,
-                secure=True,
-                samesite="Lax",
-            )
-            return response
+                response = Response(
+                    {
+                        "message": "Log In Successfully",
+                    },
+                    status=status.HTTP_202_ACCEPTED,
+                )
+                response.set_cookie(
+                    "access_token",
+                    access_token,
+                    httponly=True,
+                    secure=True,
+                    samesite="Lax",
+                )
+                response.set_cookie(
+                    "refresh_token",
+                    str(refresh_token),
+                    httponly=True,
+                    secure=True,
+                    samesite="Lax",
+                )
+                return response
+            except Exception:
+                return HttpResponse(status=500)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
