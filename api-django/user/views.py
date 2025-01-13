@@ -4,12 +4,15 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from user.serializers import UserLogInSerializer, UserSignUpSerializer
+from user.utils import get_new_access_token, require_token
 
 
-def user(request):
-    return HttpResponse("Hello world!")
+class HelloWorldView(APIView):
+
+    @require_token
+    def get(self, request):
+        return Response({"message": "Hello World!"}, status=200)
 
 
 class UserSignUpView(APIView):
