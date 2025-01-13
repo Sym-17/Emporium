@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from user.serializers import UserLogInSerializer, UserSignUpSerializer
-from user.utils import get_new_access_token, require_token
+from user.utils import refresh_access_token, require_token
 
 
 class HelloWorldView(APIView):
@@ -34,7 +34,7 @@ class UserLogInView(APIView):
                 user = serializer.validate_user(data=request.data)
 
                 refresh_token = RefreshToken.for_user(user)
-                access_token = get_new_access_token(refresh_token)
+                access_token = refresh_access_token(refresh_token)
 
                 response = Response(
                     {
@@ -70,7 +70,7 @@ class RefreshAccessToken(APIView):
             return Response({"error": "Old refresh token is required!"}, status=400)
 
         try:
-            access_token = get_new_access_token(refresh_token)
+            access_token = refresh_access_token(refresh_token)
             response = JsonResponse({"message": "Access token refreshed successfully!"})
             response.set_cookie(
                 "access_token", access_token, httponly=True, secure=True, samesite="Lax"
