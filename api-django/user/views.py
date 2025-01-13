@@ -53,3 +53,21 @@ class UserLogInView(APIView):
             )
             return response
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RefreshAccessToken(APIView):
+    def post(self, request):
+        refresh_token = request.COOKIES.get("refresh_token")
+
+        if not refresh_token:
+            return Response({"error": "Old refresh token is required!"}, status=400)
+
+        try:
+            access_token = get_new_access_token(refresh_token)
+            response = JsonResponse({"message": "Access token refreshed successfully!"})
+            response.set_cookie(
+                "access_token", access_token, httponly=True, secure=True, samesite="Lax"
+            )
+            return response
+        except TokenError as e:
+            return Response({"error": "Invalid or expired refresh token"}, status=401)
